@@ -23,6 +23,7 @@ Inside a session: `/plugin marketplace add imbrace-co/imbrace-agent-toolkit`, th
 | `imbrace-mcp` | Connect the hosted MCP server in any client; OAuth sign-in, API key fallback |
 | `imbrace-cli` | Install, sign in and script the `imbrace` CLI; run `imbrace mcp` locally |
 | `imbrace-build-agents-workflows` | AI agent + streaming chat, workflows, knowledge hubs, CRM boards end to end |
+| `imbrace-vibe-code` | Build, deploy and host a full app on iMBrace (follows https://engineer.imbrace.co/skill.md) |
 
 Skills load on their own when your request matches, for example *"Help me get started with iMBrace"*.
 

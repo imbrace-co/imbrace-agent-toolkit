@@ -2,6 +2,8 @@
 
 ## 0.2.0
 
+- New `imbrace-vibe-code` skill: points the agent to https://engineer.imbrace.co/skill.md (kept current with the
+  `imbrace-vibe-code-v2` CLI) for building and hosting apps on iMBrace.
 - Claude Code MCP is now OAuth-first: `.mcp.json` declares the hosted server by URL only. This removes the
   `Authorization` header that was sent with an empty key when no API key was set. Where the gateway has OAuth
   enabled, Claude Code runs the sign-in (`/mcp` → `imbrace` → Authenticate) and the organization and access

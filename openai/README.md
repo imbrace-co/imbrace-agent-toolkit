@@ -10,6 +10,7 @@ platform for CRM data boards, conversations, AI agents, workflows and knowledge 
 | `imbrace-mcp` | Connect the iMBrace hosted MCP server in Codex, Cursor and other clients; OAuth or API key, least access |
 | `imbrace-cli` | Install, sign in and script the `imbrace` CLI |
 | `imbrace-build-agents-workflows` | AI agent + streaming chat, workflows, knowledge hubs, CRM boards end to end |
+| `imbrace-vibe-code` | Build, deploy and host a full app on iMBrace (follows https://engineer.imbrace.co/skill.md) |
 
 Try: *"Help me get started with iMBrace"*.
 

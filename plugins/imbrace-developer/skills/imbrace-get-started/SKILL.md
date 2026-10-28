@@ -29,7 +29,7 @@ Ask the developer, in one message, and wait for the answers:
    | Let an AI agent read or change their iMBrace data | hosted MCP server | `imbrace-mcp` |
    | Scripts, CI, terminal automation | CLI `@imbrace/cli` | `imbrace-cli` |
    | AI agents, workflows, knowledge hubs, CRM boards | SDK or CLI | `imbrace-build-agents-workflows` |
-   | Build and host a full app on iMBrace (vibe code) | read https://engineer.imbrace.co/skill.md and follow it | — |
+   | Build and host a full app on iMBrace (vibe code) | https://engineer.imbrace.co/skill.md | `imbrace-vibe-code` |
 
 ## 2. Get a credential
 

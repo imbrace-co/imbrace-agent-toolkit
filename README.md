@@ -36,7 +36,7 @@ The same skills are published in the OpenAI plugin directory as **iMBrace Develo
 plugins/imbrace-developer/
   .claude-plugin/plugin.json         plugin manifest (version, MCP URL setting)
   .mcp.json                          hosted iMBrace MCP server (OAuth)
-  skills/<name>/SKILL.md             five skills
+  skills/<name>/SKILL.md             six skills
 openai/codex-plugin.json             OpenAI / Codex listing manifest
 scripts/package.mjs                  builds dist/*.zip and checks limits
 docs/                                release and submission checklists
