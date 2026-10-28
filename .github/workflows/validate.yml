@@ -1,0 +1,77 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Pinned to the version the plugin was validated with locally. Bump deliberately, after re-running
+      # both `claude plugin validate` commands with the new version.
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code@2.1.311
+      - name: Validate marketplace
+        run: claude plugin validate .
+      - name: Validate plugin
+        run: claude plugin validate ./plugins/imbrace-developer --strict --profile directory
+      - name: Build packages
+        run: node scripts/package.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: dist/*.zip
+
+  release:
+    needs: validate
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check MCP OAuth is live in production
+        # From 0.2.0 the plugin's MCP server relies on OAuth (see docs/release-checklist.md step 0).
+        run: curl -fsS https://app-gatewayv2.imbrace.co/.well-known/oauth-protected-resource/mcp
+      - name: Check the tag matches the plugin version
+        run: |
+          version=$(node -p 'require("./plugins/imbrace-developer/.claude-plugin/plugin.json").version')
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match plugin.json version ${version}"
+            exit 1
+          fi
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            /^## / { if (found) exit; if ($2 == v) { found = 1; next } }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::No '## ${version}' section in CHANGELOG.md"
+            exit 1
+          fi
+      - uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: dist
+      - name: Attach packages to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" > /dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" dist/*.zip --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" dist/*.zip --title "${GITHUB_REF_NAME}" --notes-file release-notes.md
+          fi

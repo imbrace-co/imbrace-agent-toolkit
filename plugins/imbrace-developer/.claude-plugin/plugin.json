@@ -1,0 +1,27 @@
+{
+  "name": "imbrace-developer",
+  "displayName": "iMBrace Developer",
+  "version": "0.2.0",
+  "description": "Build on the iMBrace platform from your coding agent: get started, use the TypeScript/Python SDK, connect the hosted MCP server, drive the CLI, and build AI agents, workflows, knowledge hubs and CRM boards.",
+  "author": {
+    "name": "iMBrace Limited",
+    "url": "https://engineer.imbrace.co"
+  },
+  "homepage": "https://engineer.imbrace.co",
+  "repository": "https://github.com/imbrace-co/imbrace-agent-toolkit",
+  "license": "MIT",
+  "keywords": ["imbrace", "mcp", "sdk", "cli", "crm", "ai-agents", "workflows", "typescript", "python"],
+  "icon": "./assets/logo.svg",
+  "documentationUrl": "https://engineer.imbrace.co",
+  "supportUrl": "https://github.com/imbrace-co/imbrace-agent-toolkit/issues",
+  "privacyPolicyUrl": "https://www.imbrace.co/privacy-policy/",
+  "termsOfServiceUrl": "https://www.imbrace.co/terms-and-conditions/",
+  "userConfig": {
+    "mcp_url": {
+      "type": "string",
+      "title": "iMBrace MCP URL",
+      "description": "Gateway MCP endpoint. Production: https://app-gatewayv2.imbrace.co/mcp, sandbox: https://app-gateway.sandbox.imbrace.co/mcp. Where the gateway has OAuth enabled, sign in with /mcp > imbrace > Authenticate and pick the organization and access; otherwise add the server with an API key (see the plugin README).",
+      "default": "https://app-gatewayv2.imbrace.co/mcp"
+    }
+  }
+}

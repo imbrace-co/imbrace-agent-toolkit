@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "imbrace-developer-tools",
+  "owner": {
+    "name": "iMBrace Limited",
+    "url": "https://engineer.imbrace.co"
+  },
+  "metadata": {
+    "description": "Official iMBrace plugins for building on the iMBrace platform with AI coding agents.",
+    "version": "0.2.0"
+  },
+  "plugins": [
+    {
+      "name": "imbrace-developer",
+      "source": "./plugins/imbrace-developer",
+      "description": "Build on iMBrace: SDK (TypeScript/Python), hosted MCP server, CLI, AI agents, workflows, and CRM boards.",
+      "category": "development",
+      "keywords": ["imbrace", "mcp", "sdk", "cli", "crm", "ai-agents", "workflows"]
+    }
+  ]
+}

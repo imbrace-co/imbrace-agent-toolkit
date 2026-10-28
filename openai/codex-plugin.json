@@ -1,0 +1,35 @@
+{
+  "name": "imbrace-developer",
+  "version": "0.2.0",
+  "description": "Build on the iMBrace platform: get started, use the TypeScript/Python SDK, connect the hosted MCP server, drive the CLI, and build AI agents, workflows, knowledge hubs and CRM boards.",
+  "author": {
+    "name": "iMBrace Limited",
+    "url": "https://engineer.imbrace.co"
+  },
+  "homepage": "https://engineer.imbrace.co",
+  "repository": "https://github.com/imbrace-co/imbrace-agent-toolkit",
+  "license": "MIT",
+  "keywords": ["imbrace", "sdk", "mcp", "cli", "crm", "ai-agents", "workflows"],
+  "skills": "./skills/",
+  "onboardingSkill": "./skills/imbrace-get-started/SKILL.md",
+  "interface": {
+    "displayName": "iMBrace Developer",
+    "shortDescription": "Build on iMBrace with AI",
+    "longDescription": "Skills that teach the model how to build on iMBrace, the customer-engagement platform for CRM data boards, conversations, AI agents, workflows and knowledge hubs.\n\n- Get started: pick an environment, get an API key safely, and make a first verified call.\n- SDK: write correct TypeScript (@imbrace/sdk) and Python (imbrace) code, with the right credential, namespaces and error handling.\n- MCP: connect Codex, Cursor or other MCP clients to the iMBrace hosted MCP server, with OAuth sign-in where the gateway supports it or an API key, and the least access needed.\n- CLI: install, sign in and script the imbrace CLI for boards, AI agents and workflows.\n- Build: create an AI agent, stream chat, publish a workflow the agent can call, attach a knowledge hub and model CRM boards.\n\nDocumentation: https://engineer.imbrace.co",
+    "developerName": "iMBrace Limited",
+    "category": "Developer Tools",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Help me get started with iMBrace",
+      "Write a TypeScript script that lists my iMBrace boards",
+      "Build a support bot on iMBrace that can call a workflow"
+    ],
+    "websiteURL": "https://engineer.imbrace.co",
+    "supportURL": "https://github.com/imbrace-co/imbrace-agent-toolkit/issues",
+    "privacyPolicyURL": "https://www.imbrace.co/privacy-policy/",
+    "termsOfServiceURL": "https://www.imbrace.co/terms-and-conditions/",
+    "brandColor": "#FA9917",
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  }
+}
