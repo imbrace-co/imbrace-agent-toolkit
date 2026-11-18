@@ -20,8 +20,8 @@
     "mcp_url": {
       "type": "string",
       "title": "iMBrace MCP URL",
-      "description": "Gateway MCP endpoint. Production: https://app-gatewayv2.imbrace.co/mcp, sandbox: https://app-gateway.sandbox.imbrace.co/mcp. Where the gateway has OAuth enabled, sign in with /mcp > imbrace > Authenticate and pick the organization and access; otherwise add the server with an API key (see the plugin README).",
-      "default": "https://app-gatewayv2.imbrace.co/mcp"
+      "description": "Gateway MCP endpoint. Defaults to the dev gateway (https://app-gateway.dev.imbrace.co/mcp), the first with OAuth sign-in; production (https://app-gatewayv2.imbrace.co/mcp) becomes the default once it has OAuth. Sandbox: https://app-gateway.sandbox.imbrace.co/mcp. Where the gateway has OAuth enabled, sign in with /mcp > imbrace > Authenticate and pick the organization and access; otherwise add the server with an API key (see the plugin README).",
+      "default": "https://app-gateway.dev.imbrace.co/mcp"
     }
   }
 }
