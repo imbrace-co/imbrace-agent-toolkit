@@ -85,7 +85,7 @@ With an **API key**, the connection is read-only unless the URL says otherwise:
 |---|---|
 | `?allowWrite=1` | also create and update (API key only) |
 | `?allowDestructive=1` | also delete, implies write (API key only) |
-| `?services=dataBoard,workflow` | only tools of these services (`dataBoard`, `channel`, `platform`, `marketplace`, `workflow`) |
+| `?services=dataBoard,workflow` | only tools of these services (`dataBoard`, `channel`, `platform`, `marketplace`, `workflow`, `aiAgent`) |
 | `?tags=boards,records` | only tools with these topics |
 
 `services` and `tags` narrow the available tools for either sign-in method: other tools are neither listed nor
@@ -97,6 +97,12 @@ job, and sandbox before production.
 
 - Before any create, update or delete, say exactly what will change and get the developer's confirmation.
   Prefer sandbox for experiments.
+- **AI agents**: `listAgents` (paged, `search` by name) gives an agent's id; `askAgent` runs it on one message
+  (each call is a new conversation, and can take a few minutes). The agent reads at once, but an action that changes
+  data waits for the person: the answer is `input-required` with an `approval_id` per action and nothing of it done.
+  Show the actions to the developer, and only after they answer call `respondToAgentApproval` with each
+  `approval_id` and `approved` true or false — never approve on their behalf. The run then continues; the answer's
+  `results` say how each action ended. A request expires after 15 minutes (ask again). Both tools need write access.
 - A "tool not enabled" error or a missing write/delete tool means the grant lacks `imbrace.write` /
   `imbrace.delete` (OAuth), the URL lacks `allowWrite` / `allowDestructive` (API key), or the `services` / `tags`
   filter on the URL excludes it. Explain what is needed; do not work around it.
