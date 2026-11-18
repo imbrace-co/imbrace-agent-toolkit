@@ -32,10 +32,12 @@
 - Plugin README: in-session install is `/plugin marketplace add` then `/plugin install imbrace-developer@imbrace-developer-tools`.
 - Package script: the `api_` key scan also covers the READMEs, `plugin.json`, `codex-plugin.json` and `.mcp.json`.
 - CI: Claude Code pinned for validation (2.1.311); read-only by default; the release job runs only on `v*` tags,
-  checks the tag against `plugin.json`, uses only that version's CHANGELOG section as release notes, and fails
-  unless the production gateway serves the MCP OAuth metadata.
-- Requires OAuth for the MCP server to be live in each environment (production and sandbox) before this version
-  is published.
+  checks the tag against `plugin.json`, uses only that version's CHANGELOG section as release notes, and warns
+  when the production gateway does not serve the MCP OAuth metadata yet.
+- `imbrace-mcp`: explains 402 `plan_feature_unavailable` (the organization's plan does not include MCP access) and
+  how to resolve it.
+- MCP OAuth rolls out environment by environment. Until a gateway has it, the plugin's `imbrace` server shows as
+  failed there and the API-key method in the plugin README is the way to connect; the skills work either way.
 
 ## 0.1.1
 

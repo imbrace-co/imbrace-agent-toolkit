@@ -101,6 +101,8 @@ job, and sandbox before production.
   `imbrace.delete` (OAuth), the URL lacks `allowWrite` / `allowDestructive` (API key), or the `services` / `tags`
   filter on the URL excludes it. Explain what is needed; do not work around it.
 - 401: not signed in, the sign-in expired, or the key is wrong, expired or from another environment. 403: the
-  user's role in that organization lacks permission.
+  user's role in that organization lacks permission. 402 `plan_feature_unavailable` ("MCP access is not included
+  in your plan"): the organization's plan does not include MCP access. An iMBrace admin enables it per plan; with
+  OAuth, the developer can also sign in again and pick another organization whose plan includes it.
 - Clients that read OpenAPI tool specs instead of MCP can use `GET <gateway>/agent-tools/openapi.json` with an
   API key header and the same filters.

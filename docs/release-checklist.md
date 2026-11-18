@@ -2,11 +2,13 @@
 
 ## Every release
 
-0. **MCP OAuth must be live** in every environment the plugin points at (production
-   `https://app-gatewayv2.imbrace.co/mcp`, and sandbox for testing): an unauthenticated `POST /mcp` returns 401 with
+0. **Check where MCP OAuth is live.** OAuth for `/mcp` rolls out environment by environment (dev, then sandbox,
+   then production). In an environment that has it, an unauthenticated `POST /mcp` returns 401 with
    `WWW-Authenticate: Bearer resource_metadata=...`, `/.well-known/oauth-protected-resource/mcp` resolves, and DCR +
-   consent (org picker, `imbrace.read/write/delete`) work. From 0.2.0 the plugin has no API-key setting, so without
-   OAuth its MCP server cannot connect. Do not publish 0.2.0+ before this is true.
+   consent (org picker, `imbrace.read/write/delete`) work. The plugin can be released before production has it: the
+   skills work everywhere, and until then the plugin's `imbrace` server shows as failed on production and the README
+   API-key method is the way to connect. The release job only warns about this. Do **not** submit to the Anthropic
+   plugin directory or the Connectors Directory before production has OAuth.
 1. Bump `version` in `plugins/imbrace-developer/.claude-plugin/plugin.json`, `openai/codex-plugin.json` and
    `.claude-plugin/marketplace.json` (`metadata.version`); add a `CHANGELOG.md` entry.
 2. `claude plugin validate .` and `claude plugin validate ./plugins/imbrace-developer --strict --profile directory`.
