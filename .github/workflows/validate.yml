@@ -40,9 +40,15 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Check MCP OAuth is live in production
-        # From 0.2.0 the plugin's MCP server relies on OAuth (see docs/release-checklist.md step 0).
-        run: curl -fsS https://app-gatewayv2.imbrace.co/.well-known/oauth-protected-resource/mcp
+      - name: Report whether MCP OAuth is live in production
+        # OAuth rolls out per environment (docs/release-checklist.md step 0). Until production has it, the plugin's
+        # MCP server cannot sign in there and users connect with an API key, so this only warns.
+        run: |
+          if curl -fsS -o /dev/null https://app-gatewayv2.imbrace.co/.well-known/oauth-protected-resource/mcp; then
+            echo "MCP OAuth is live in production."
+          else
+            echo "::warning::MCP OAuth is not live in production yet; the plugin's MCP server needs the API-key method there."
+          fi
       - name: Check the tag matches the plugin version
         run: |
           version=$(node -p 'require("./plugins/imbrace-developer/.claude-plugin/plugin.json").version')

@@ -27,7 +27,8 @@ Update: `claude plugin marketplace update imbrace-developer-tools`. Remove: `cla
 
 ## ChatGPT and Codex
 
-The same skills are published in the OpenAI plugin directory as **iMBrace Developer** (link added on release).
+The same skills are packaged for the OpenAI plugin directory as **iMBrace Developer** (listing coming later; the
+link will be added here).
 
 ## What's inside
 
