@@ -38,6 +38,8 @@
   how to resolve it.
 - MCP OAuth rolls out environment by environment. Until a gateway has it, the plugin's `imbrace` server shows as
   failed there and the API-key method in the plugin README is the way to connect; the skills work either way.
+- The **iMBrace MCP URL** setting now defaults to the dev gateway (`https://app-gateway.dev.imbrace.co/mcp`), the
+  first environment with OAuth. Production becomes the default again in a later release, once it has OAuth.
 
 ## 0.1.1
 

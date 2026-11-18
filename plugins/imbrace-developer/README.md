@@ -31,8 +31,10 @@ Skills load on their own when your request matches, for example *"Help me get st
 
 The plugin adds the hosted iMBrace MCP server as `imbrace`, with no credential stored in the plugin.
 
-The one setting, **iMBrace MCP URL**, defaults to production `https://app-gatewayv2.imbrace.co/mcp`; use
-`https://app-gateway.sandbox.imbrace.co/mcp` for sandbox. Change it later with `/plugin` → iMBrace Developer.
+The one setting, **iMBrace MCP URL**, defaults to the dev gateway `https://app-gateway.dev.imbrace.co/mcp`, the
+first environment with OAuth sign-in. Production `https://app-gatewayv2.imbrace.co/mcp` becomes the default in a
+later release, once it has OAuth; use `https://app-gateway.sandbox.imbrace.co/mcp` for sandbox. Change it with
+`/plugin` → iMBrace Developer. If you never changed it, a plugin update moves you to the new default.
 `?services=` and `?tags=` on the URL narrow the tools that are listed and can be called. Access control is
 separate: OAuth scopes (below), or `allowWrite` / `allowDestructive` with an API key.
 
