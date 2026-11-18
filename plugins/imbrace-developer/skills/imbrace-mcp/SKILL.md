@@ -103,6 +103,10 @@ job, and sandbox before production.
   Show the actions to the developer, and only after they answer call `respondToAgentApproval` with each
   `approval_id` and `approved` true or false — never approve on their behalf. The run then continues; the answer's
   `results` say how each action ended. A request expires after 15 minutes (ask again). Both tools need write access.
+- **Long answers**: `listFlows` and `listPieces` return a short summary of each item (`getFlow` / `getPiece` have the
+  full definition). An answer too long for one reply comes back as the first items of its list with
+  `_truncated: {returned, total}` — say that the list is partial, then narrow it with the tool's filters or paging
+  (`search`, `limit`, `skip`, `cursor`) or fetch one item by id instead of repeating the same call.
 - A "tool not enabled" error or a missing write/delete tool means the grant lacks `imbrace.write` /
   `imbrace.delete` (OAuth), the URL lacks `allowWrite` / `allowDestructive` (API key), or the `services` / `tags`
   filter on the URL excludes it. Explain what is needed; do not work around it.

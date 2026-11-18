@@ -4,6 +4,8 @@
 
 - `imbrace-mcp` skill: how to use the AI agent tools (`listAgents`, `askAgent`) and the approval step
   (`input-required` → ask the developer → `respondToAgentApproval`); `aiAgent` added to the `services` filter.
+- `imbrace-mcp` skill: long answers — `listFlows` / `listPieces` are summaries, and an answer cut to fit carries
+  `_truncated: {returned, total}`; narrow with filters or paging instead of repeating the call.
 
 ## 0.2.0
 
