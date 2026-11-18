@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- `imbrace-mcp` skill: how to use the AI agent tools (`listAgents`, `askAgent`) and the approval step
+  (`input-required` → ask the developer → `respondToAgentApproval`); `aiAgent` added to the `services` filter.
+
 ## 0.2.0
 
 - New `imbrace-vibe-code` skill: points the agent to https://engineer.imbrace.co/skill.md (kept current with the
