@@ -15,6 +15,9 @@ and licences apply. Reference: https://engineer.imbrace.co/mcp/overview/
 | sandbox | `https://app-gateway.sandbox.imbrace.co/mcp` |
 | on-premise | `https://<their gateway>/mcp` |
 
+Each environment has its own accounts, organizations and API keys. Ask which environment the developer means
+before giving a URL; the plugin's server defaults to production.
+
 ## How sign-in works
 
 Two methods, one per connection:
@@ -44,7 +47,21 @@ API key fallback.
   404), OAuth is not enabled on that gateway: disable the plugin's server and add one with an API key (below).
   Without the plugin (OAuth gateways): `claude mcp add --transport http imbrace https://app-gatewayv2.imbrace.co/mcp`,
   then `/mcp` → Authenticate.
-- **Claude Desktop**: Settings → Connectors → add a custom connector with the MCP URL, then sign in.
+  Another environment: change the plugin's MCP URL, or keep it and add each other environment under its own name
+  (`claude mcp add --transport http imbrace-sandbox https://app-gateway.sandbox.imbrace.co/mcp`), then
+  `/mcp` → that server → Authenticate. Each server signs in separately; its tools are named
+  `mcp__imbrace-sandbox__...`, so call the one for the environment the developer asked about.
+- **claude.ai, Claude Desktop and the mobile apps**: add a **custom connector**. OAuth gateways only, since a custom
+  connector cannot send an API key.
+  1. Settings → Connectors → **Add custom connector** (Team / Enterprise: an Owner adds it in the organization's
+     connector settings first, then members connect it).
+  2. Name it per environment (`iMBrace`, `iMBrace (sandbox)`), paste the MCP URL, and leave the advanced OAuth
+     client ID and secret empty (the app registers itself).
+  3. **Connect**, sign in, pick the organization and access on the consent screen.
+  4. In a chat, turn the connector on from the tools menu.
+  One connector per environment and organization; reconnect to switch organization or access. These apps connect
+  from Anthropic's cloud, so the gateway must be reachable from the internet: an on-premise gateway behind a VPN
+  needs Claude Code or another local client instead.
 - **Codex CLI**, in `~/.codex/config.toml`:
   ```toml
   [mcp_servers.imbrace]

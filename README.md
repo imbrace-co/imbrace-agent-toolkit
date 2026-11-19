@@ -16,10 +16,15 @@ claude plugin install imbrace-developer@imbrace-developer-tools
 Or inside a session: `/plugin marketplace add imbrace-co/imbrace-agent-toolkit`, then
 `/plugin install imbrace-developer@imbrace-developer-tools`.
 
-The plugin adds the hosted iMBrace MCP server, with no API key stored in the plugin. Where the gateway has OAuth
-enabled (rolling out; on-premise gateways may not have it), run `/mcp`, select `imbrace`, choose **Authenticate**,
-sign in and pick the organization and access. Otherwise, and for CI, connect with an API key as described in
+The plugin adds the hosted iMBrace MCP server (production by default), with no API key stored in the plugin. Run
+`/mcp`, select `imbrace`, choose **Authenticate**, sign in and pick the organization and access. On a gateway
+without OAuth (on-premise gateways may not have it), and for CI, connect with an API key as described in
 [the plugin README](plugins/imbrace-developer/README.md). The skills work either way.
+
+Sandbox, on-premise or several environments at once: see
+[Other environments](plugins/imbrace-developer/README.md#other-environments). Using Claude on the web, desktop or
+mobile instead of Claude Code: add iMBrace as a
+[custom connector](plugins/imbrace-developer/README.md#claude-web-desktop-and-mobile-custom-connector).
 
 **First use:** start a new session and ask *"Help me get started with iMBrace"*.
 
