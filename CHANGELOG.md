@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1
+
+- The plugin's MCP server now has a fixed URL, production `https://app-gatewayv2.imbrace.co/mcp`, and the
+  **iMBrace MCP URL** setting is removed: the Claude plugin directory accepts only MCP servers with a fixed public
+  URL. For sandbox or an on-premise gateway, add your own server under another name
+  (`claude mcp add --transport http imbrace-sandbox <url>`), as described in the plugin README.
+
 ## 0.3.0
 
 - The **iMBrace MCP URL** setting now defaults to production (`https://app-gatewayv2.imbrace.co/mcp`), which has

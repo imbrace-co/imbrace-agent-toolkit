@@ -16,7 +16,7 @@ and licences apply. Reference: https://engineer.imbrace.co/mcp/overview/
 | on-premise | `https://<their gateway>/mcp` |
 
 Each environment has its own accounts, organizations and API keys. Ask which environment the developer means
-before giving a URL; the plugin's server defaults to production.
+before giving a URL; the plugin's server always connects to production.
 
 ## How sign-in works
 
@@ -42,12 +42,12 @@ themselves. The OAuth steps below apply only where the gateway has OAuth enabled
 API key fallback.
 
 - **Claude Code**: if the developer uses the iMBrace Claude Code plugin, the `imbrace` server is already added.
-  Run `/mcp`, select `imbrace`, choose **Authenticate**, sign in and pick the organization and access. The URL is
-  the plugin's setting (`/plugin` → iMBrace Developer). If `/mcp` shows the server as failed (client registration
+  Run `/mcp`, select `imbrace`, choose **Authenticate**, sign in and pick the organization and access. It always
+  points to production. If `/mcp` shows the server as failed (client registration
   404), OAuth is not enabled on that gateway: disable the plugin's server and add one with an API key (below).
   Without the plugin (OAuth gateways): `claude mcp add --transport http imbrace https://app-gatewayv2.imbrace.co/mcp`,
   then `/mcp` → Authenticate.
-  Another environment: change the plugin's MCP URL, or keep it and add each other environment under its own name
+  Another environment: add it under its own name (the plugin's server stays on production)
   (`claude mcp add --transport http imbrace-sandbox https://app-gateway.sandbox.imbrace.co/mcp`), then
   `/mcp` → that server → Authenticate. Each server signs in separately; its tools are named
   `mcp__imbrace-sandbox__...`, so call the one for the environment the developer asked about.
