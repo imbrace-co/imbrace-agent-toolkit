@@ -40,7 +40,7 @@ link will be added here).
 ```
 .claude-plugin/marketplace.json      marketplace "imbrace-developer-tools"
 plugins/imbrace-developer/
-  .claude-plugin/plugin.json         plugin manifest (version, MCP URL setting)
+  .claude-plugin/plugin.json         plugin manifest (version, listing fields)
   .mcp.json                          hosted iMBrace MCP server (OAuth)
   skills/<name>/SKILL.md             six skills
 openai/codex-plugin.json             OpenAI / Codex listing manifest

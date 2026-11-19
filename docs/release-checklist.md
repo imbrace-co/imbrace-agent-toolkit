@@ -23,8 +23,7 @@
 - [ ] Clean-machine test:
       `claude plugin marketplace add imbrace-co/imbrace-agent-toolkit` →
       `claude plugin install imbrace-developer@imbrace-developer-tools` →
-      `/plugin` → iMBrace Developer → set the MCP URL to `https://app-gateway.sandbox.imbrace.co/mcp` →
-      `/mcp` → `imbrace` → Authenticate → sign in, pick a sandbox org, grant read only →
+      `/mcp` → `imbrace` → Authenticate → sign in, pick a production test org, grant read only →
       `claude mcp list` shows `plugin:imbrace-developer:imbrace ... Connected` →
       ask "Help me get started with iMBrace" and "List my iMBrace boards"; confirm a write tool is unavailable,
       then re-authenticate with write and confirm it appears.

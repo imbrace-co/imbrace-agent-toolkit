@@ -31,9 +31,8 @@ Skills load on their own when your request matches, for example *"Help me get st
 
 The plugin adds the hosted iMBrace MCP server as `imbrace`, with no credential stored in the plugin.
 
-The one setting, **iMBrace MCP URL**, defaults to production `https://app-gatewayv2.imbrace.co/mcp`. Change it
-with `/plugin` → iMBrace Developer to use another environment (see [Other environments](#other-environments)). If
-you never changed it, a plugin update moves you to the new default.
+It connects to production, `https://app-gatewayv2.imbrace.co/mcp`. For another environment, add a server of your
+own (see [Other environments](#other-environments)).
 `?services=` and `?tags=` on the URL narrow the tools that are listed and can be called. Access control is
 separate: OAuth scopes (below), or `allowWrite` / `allowDestructive` with an API key.
 
@@ -78,19 +77,17 @@ Each environment has its own accounts, organizations and API keys: sign in (or c
 you connect to. OAuth is enabled environment by environment and on-premise gateways may not have it. To check one,
 open `<gateway>/.well-known/oauth-protected-resource/mcp`: JSON means OAuth is on, 404 means use an API key.
 
-- **One environment instead of production:** set the plugin's MCP URL (`/plugin` → iMBrace Developer), then `/mcp`
-  → `imbrace` → Authenticate.
-- **Several environments side by side:** keep the plugin's server on one and add the others under their own names,
-  each signed in separately:
+The plugin's `imbrace` server always points to production. Add each other environment under its own name, each
+signed in separately (disable the plugin's server with `/mcp` if you only want the other environment):
 
-  ```bash
-  claude mcp add --transport http imbrace-sandbox https://app-gateway.sandbox.imbrace.co/mcp
-  claude mcp add --transport http imbrace-onprem https://<your gateway>/mcp
-  ```
+```bash
+claude mcp add --transport http imbrace-sandbox https://app-gateway.sandbox.imbrace.co/mcp
+claude mcp add --transport http imbrace-onprem https://<your gateway>/mcp
+```
 
-  Then `/mcp` → each server → Authenticate (or add `--header "Authorization: Bearer $IMBRACE_SANDBOX_API_KEY"` on a
-  gateway without OAuth, one key variable per environment). Tools show up per server
-  (`mcp__imbrace-sandbox__listBoards`), so say which environment you mean when you ask.
+Then `/mcp` → each server → Authenticate (or add `--header "Authorization: Bearer $IMBRACE_SANDBOX_API_KEY"` on a
+gateway without OAuth, one key variable per environment). Tools show up per server
+(`mcp__imbrace-sandbox__listBoards`), so say which environment you mean when you ask.
 
 ## Claude (web, desktop and mobile): custom connector
 
