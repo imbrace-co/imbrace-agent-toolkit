@@ -1,7 +1,16 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
+- The **iMBrace MCP URL** setting now defaults to production (`https://app-gatewayv2.imbrace.co/mcp`), which has
+  OAuth sign-in. If you never changed the setting, this update moves you from the dev gateway to production: run
+  `/mcp` → `imbrace` → Authenticate again.
+- Plugin README and `imbrace-mcp` skill: other environments (sandbox, on-premise), how to check whether a gateway
+  has OAuth, and how to connect several environments side by side in Claude Code (one named server per
+  environment, each signed in separately).
+- Plugin README and `imbrace-mcp` skill: connect Claude on the web, desktop and mobile with a **custom connector**
+  (OAuth gateways only; one connector per environment and organization; the gateway must be reachable from the
+  internet).
 - `imbrace-mcp` skill: how to use the AI agent tools (`listAgents`, `askAgent`) and the approval step
   (`input-required` → ask the developer → `respondToAgentApproval`); `aiAgent` added to the `services` filter.
 - `imbrace-mcp` skill: long answers — `listFlows` / `listPieces` are summaries, and an answer cut to fit carries

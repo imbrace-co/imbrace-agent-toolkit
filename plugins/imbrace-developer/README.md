@@ -31,10 +31,9 @@ Skills load on their own when your request matches, for example *"Help me get st
 
 The plugin adds the hosted iMBrace MCP server as `imbrace`, with no credential stored in the plugin.
 
-The one setting, **iMBrace MCP URL**, defaults to the dev gateway `https://app-gateway.dev.imbrace.co/mcp`, the
-first environment with OAuth sign-in. Production `https://app-gatewayv2.imbrace.co/mcp` becomes the default in a
-later release, once it has OAuth; use `https://app-gateway.sandbox.imbrace.co/mcp` for sandbox. Change it with
-`/plugin` → iMBrace Developer. If you never changed it, a plugin update moves you to the new default.
+The one setting, **iMBrace MCP URL**, defaults to production `https://app-gatewayv2.imbrace.co/mcp`. Change it
+with `/plugin` → iMBrace Developer to use another environment (see [Other environments](#other-environments)). If
+you never changed it, a plugin update moves you to the new default.
 `?services=` and `?tags=` on the URL narrow the tools that are listed and can be called. Access control is
 separate: OAuth scopes (below), or `allowWrite` / `allowDestructive` with an API key.
 
@@ -66,6 +65,55 @@ claude mcp add --transport http imbrace https://app-gatewayv2.imbrace.co/mcp \
 API-key connections are read-only unless the URL has `?allowWrite=1` (or `?allowDestructive=1` for deletes);
 `?services=` and `?tags=` narrow the available tools on top of that.
 Never paste the key into the chat or commit it.
+
+## Other environments
+
+| Environment | MCP URL |
+|---|---|
+| production (default) | `https://app-gatewayv2.imbrace.co/mcp` |
+| sandbox | `https://app-gateway.sandbox.imbrace.co/mcp` |
+| on-premise | `https://<your gateway>/mcp` |
+
+Each environment has its own accounts, organizations and API keys: sign in (or create the key) in the environment
+you connect to. OAuth is enabled environment by environment and on-premise gateways may not have it. To check one,
+open `<gateway>/.well-known/oauth-protected-resource/mcp`: JSON means OAuth is on, 404 means use an API key.
+
+- **One environment instead of production:** set the plugin's MCP URL (`/plugin` → iMBrace Developer), then `/mcp`
+  → `imbrace` → Authenticate.
+- **Several environments side by side:** keep the plugin's server on one and add the others under their own names,
+  each signed in separately:
+
+  ```bash
+  claude mcp add --transport http imbrace-sandbox https://app-gateway.sandbox.imbrace.co/mcp
+  claude mcp add --transport http imbrace-onprem https://<your gateway>/mcp
+  ```
+
+  Then `/mcp` → each server → Authenticate (or add `--header "Authorization: Bearer $IMBRACE_SANDBOX_API_KEY"` on a
+  gateway without OAuth, one key variable per environment). Tools show up per server
+  (`mcp__imbrace-sandbox__listBoards`), so say which environment you mean when you ask.
+
+## Claude (web, desktop and mobile): custom connector
+
+Without Claude Code, connect iMBrace to Claude as a **custom connector**. This needs a gateway with OAuth enabled;
+custom connectors cannot send an API key.
+
+1. In Claude, open **Settings → Connectors** and choose **Add custom connector**. On a Team or Enterprise plan an
+   Owner adds it first under the organization's connector settings; members then connect it from their own
+   settings.
+2. Name it after the environment, for example `iMBrace` or `iMBrace (sandbox)`, and paste the MCP URL from the
+   table above. Leave the advanced OAuth client ID and secret empty: Claude registers itself with iMBrace.
+3. Choose **Connect**, sign in to iMBrace, and on the consent screen pick the organization and the access (read,
+   write, delete).
+4. In a chat, turn the connector on from the tools menu, then ask, for example, *"List my iMBrace boards"*.
+
+Notes:
+
+- One connector per environment and organization. To switch organization or access, disconnect the connector and
+  connect it again.
+- Claude reaches the gateway from Anthropic's cloud, not from your computer, so the gateway must be reachable from
+  the internet. An on-premise gateway behind a VPN or firewall works only from Claude Code (or another local
+  client) on a machine that can reach it.
+- A connector added on claude.ai is also available in Claude Desktop and the mobile apps.
 
 ## Privacy
 
