@@ -112,11 +112,28 @@ Notes:
   client) on a machine that can reach it.
 - A connector added on claude.ai is also available in Claude Desktop and the mobile apps.
 
-## Privacy
+## Network and data
 
-The MCP server is operated by iMBrace Limited. Calls run as the iMBrace user and organization you sign in with
-(or with your API key) and are subject to the [iMBrace privacy policy](https://www.imbrace.co/privacy-policy/) and
-[terms](https://www.imbrace.co/terms-and-conditions/). The skills themselves send nothing anywhere.
+The plugin's MCP server is `https://app-gatewayv2.imbrace.co/mcp`. Beyond it, the skills tell your agent to call
+only these services, and only when you (or your agent, with your approval) run the commands or code they suggest:
+
+| Service | Used for |
+|---|---|
+| iMBrace API gateway: `https://app-gatewayv2.imbrace.co` (production), `https://app-gateway.sandbox.imbrace.co` (sandbox), or your on-premise gateway | SDK and CLI calls, and MCP servers you add for other environments |
+| iMBrace sign-in: `https://auth.imbrace.co` (or your environment's) | OAuth sign-in for the MCP server and the CLI |
+| `https://engineer.imbrace.co` | Documentation, and the vibe-code guide (`/skill.md`) the `imbrace-vibe-code` skill reads |
+| `https://<app>.vibe.<env>.imbrace.co` | Apps you build and deploy on iMBrace with the vibe-code CLI |
+| npm (`registry.npmjs.org`) and PyPI (`pypi.org`) | Installing `@imbrace/sdk`, `@imbrace/cli` and the Python `imbrace` package |
+
+**Credentials.** The plugin stores no credential. Sign-in uses OAuth. If you choose an API key instead, you set
+`IMBRACE_API_KEY` yourself, and the skills send it only to the iMBrace gateway you chose.
+
+**Data.** Tool calls read, and with the access you grant change, records in the iMBrace organization you signed in
+to (for example boards, contacts and conversations, which can include personal data). iMBrace keeps them in your
+account. Everything runs as your iMBrace user, under the
+[iMBrace privacy policy](https://www.imbrace.co/privacy-policy/) and
+[terms](https://www.imbrace.co/terms-and-conditions/). iMBrace Limited operates the MCP server and the services
+above, except npm and PyPI.
 
 ## Support
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+- Plugin README: a **Network and data** section listing every service the plugin and its skills call (iMBrace
+  gateway and sign-in, engineer.imbrace.co, vibe-code app hosts, npm and PyPI), how credentials are handled, and
+  what data tool calls read and change. Replaces the Privacy section.
+
 ## 0.3.1
 
 - The plugin's MCP server now has a fixed URL, production `https://app-gatewayv2.imbrace.co/mcp`, and the
