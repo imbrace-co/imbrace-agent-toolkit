@@ -61,7 +61,8 @@ Mostly the same namespaces in both languages, language-style method names:
 | Namespace (TS / Python) | Use for |
 |---|---|
 | `boards` | CRM data boards: boards, fields, items, search, CSV; knowledge-hub folders and files |
-| `chatAi` / `chat_ai` | create, update, list, delete AI agents (`createAiAgent`, `updateAiAgent`), orchestrators |
+| `agent` | **create** AI agents: `createUseCase` makes the agent and its AgentIQ dashboard card (`createAiAgent` makes no card, so the agent never shows in the dashboard); list / delete them with `listUseCases`, `deleteUseCase` |
+| `chatAi` / `chat_ai` | read and update AI agents by their UUID (`getAiAgent`, `updateAiAgent`), orchestrators |
 | `aiAgent` / `ai_agent` | chat with an AI agent (`streamChat`, `streamChatText`), sub-agent chat, chat history, traces |
 | `ai` | OpenAI-compatible completions (`complete`, `stream`) and embeddings (`embed`); RAG files (`listRagFiles`, `uploadRagFile`); guardrails; LLM providers (`listProviders`) |
 | `workflows` | flows, triggers, runs |
@@ -69,7 +70,7 @@ Mostly the same namespaces in both languages, language-style method names:
 | `contacts`, `conversations`, `messages`, `channel`, `campaign`, `outbound` | contacts and messaging |
 | `platform`, `organizations`, `teams` | users, orgs, teams (`platform.getMe()`) |
 | `auth` | password and SSO sign-in (`signIn`, `signinSSO`), `getThirdPartyToken` (create an API key) |
-| `fileService`, `marketplace`, `agent`, `templates`, `schedule` | uploads, marketplace, use-case templates, scheduling |
+| `fileService`, `marketplace`, `templates`, `schedule` | uploads, marketplace, templates, scheduling |
 
 User OTP sign-in lives on the client itself: `client.requestOtp(email)` → `client.loginWithOtp(email, otp)` →
 `client.selectOrganization(orgId)` (Python: `request_otp`, `login_with_otp`, `select_organization`).

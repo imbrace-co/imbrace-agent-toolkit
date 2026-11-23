@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.3
+
+- `imbrace-build-agents-workflows` and `imbrace-sdk` skills: create AI agents with `client.agent.createUseCase`,
+  which also makes the agent's card on the dashboard's AgentIQ page. `chatAi.createAiAgent` makes the agent without
+  a card, so agents a coding tool created that way worked over the API but could not be found in the dashboard.
+  The skill also says where to find the agent (Actions → AgentIQ) and how to replace one that has no card.
+
 ## 0.3.2
 
 - Plugin README: a **Network and data** section listing every service the plugin and its skills call (iMBrace

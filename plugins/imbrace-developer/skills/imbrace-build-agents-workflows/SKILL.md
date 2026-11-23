@@ -6,7 +6,7 @@ description: Build end-to-end features on iMBrace with the SDK - create an AI ag
 # Build AI agents, workflows, knowledge hubs and boards
 
 Examples are TypeScript; Python uses the same calls in snake_case, mostly with dict bodies
-(`client.chat_ai.create_ai_agent({...})`, `agent["id"]`). A few take arguments instead:
+(`client.agent.create_use_case({...})`, `use_case["assistant_id"]`). A few take arguments instead:
 `boards.create(name, description)`, `boards.list_items(board_id, limit=20, skip=0)`,
 `workflows.create_flow(display_name, project_id)`, `workflows.list_runs(flow_id=..., limit=10)`.
 Full guide: https://engineer.imbrace.co/sdk/full-flow-guide/
@@ -26,17 +26,33 @@ const client = new ImbraceClient({
 
 ## 1. AI agent and chat
 
+Create agents with `client.agent.createUseCase`, the call the dashboard and `imbrace ai-agent create` make. It
+creates the agent, its web-chat channel and its card on the dashboard's **AgentIQ** page. Do not use
+`client.chatAi.createAiAgent` (or `client.ai.createAiAgentApp`) to create an agent people will look for: it creates the agent without a card, so it chats over the API but never shows in the
+dashboard, and the developer cannot find, open or edit it there.
+
 ```ts
-const agent = await client.chatAi.createAiAgent({
-  name: "Support Bot",
-  workflow_name: "support_bot_v1",          // unique, a-z 0-9 _
-  description: "Tier-1 customer support",
-  instructions: "You are a helpful support agent. Be concise and friendly.",
-  provider_id: "default",                   // the org's default chat provider (also the SDK default)
-  model_id: "Default",                      // the org's default model
-  streaming: true,
+const created = await client.agent.createUseCase({
+  usecase: {
+    title: "Support Bot",                   // the card's name; unique in the org
+    short_description: "Tier-1 customer support",
+    agent_type: "agent",
+    demo_url: "",
+  },
+  assistant: {
+    name: "Support Bot",
+    workflow_name: "support_bot_v1",        // unique, a-z 0-9 _
+    description: "Tier-1 customer support",
+    instructions: "You are a helpful support agent. Be concise and friendly.",
+    provider_id: "default",                 // the org's default chat provider (also the SDK default)
+    model_id: "Default",                    // the org's default model
+    agent_type: "agent",
+    streaming: true,
+  },
 });
-const agentId = String(agent.id ?? agent._id); // UUID, used by every later call (the response may carry either)
+const useCase = (created.data ?? created) as { _id: string; assistant_id: string }; // the service answers { data }
+const agentId = useCase.assistant_id;       // the agent's UUID, used by every later call
+// useCase._id (uc_...) is the dashboard card; client.agent.deleteUseCase(useCase._id) deletes card and agent
 
 import { randomUUID } from "node:crypto";
 const sessionId = randomUUID();             // reuse to keep conversation history
@@ -50,6 +66,12 @@ for await (const text of client.aiAgent.streamChatText({
 - Without `id`, every call starts a new conversation.
 - Other providers and models: `imbrace ai-agent list-providers` / `list-models`, or the SDK equivalents.
 - `updateAiAgent(id, {...})`: pass only the fields that change; the SDK re-sends the rest from the current agent.
+- Python: `use_case = client.agent.create_use_case({"usecase": {...}, "assistant": {...}})["data"]`, then
+  `use_case["assistant_id"]`.
+- The developer finds the agent in the dashboard under **AgentIQ** (sidebar: Actions → AgentIQ), by its title.
+- An agent that exists over the API but not on AgentIQ was made without a card, and no call adds one afterwards.
+  Create it again with `createUseCase` (copy its settings from `chatAi.getAiAgent(id)`), then delete the old one
+  with `chatAi.deleteAiAgent(id)` once the developer agrees.
 
 ## 2. Workflow, and let the agent call it
 
