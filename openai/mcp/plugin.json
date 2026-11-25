@@ -1,0 +1,99 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "imbrace",
+  "version": "0.3.4",
+  "description": "Work with your iMBrace organization from ChatGPT: CRM data boards, contacts and conversations, workflows (FlowOps) and AI agents, through the iMBrace hosted MCP server with OAuth sign-in. Includes skills for building on iMBrace with the SDK, CLI and MCP.",
+  "author": {
+    "name": "iMBrace Limited",
+    "url": "https://engineer.imbrace.co"
+  },
+  "homepage": "https://engineer.imbrace.co/mcp/overview/",
+  "repository": "https://github.com/imbrace-co/imbrace-agent-toolkit",
+  "license": "MIT",
+  "keywords": ["imbrace", "crm", "data-boards", "workflows", "ai-agents", "customer-engagement"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "iMBrace",
+        "shortDescription": "Your CRM, workflows and agents",
+        "longDescription": "Connect ChatGPT to your iMBrace organization, the customer-engagement platform for CRM data boards, conversations, workflows and AI agents.\n\nSign in with your iMBrace account, pick the organization, and choose what ChatGPT may do: read only, or also create and change, or also delete. ChatGPT then works with that organization's data, with your own permissions:\n\n- Data boards: list boards and fields, search and read records, add and update records.\n- Contacts and conversations: find contacts, read conversation history, reply and assign.\n- Workflows (FlowOps): list flows and runs, read a flow, trigger a flow.\n- AI agents: list your organization's agents and ask one to answer a question or do a task. An agent that wants to change data first asks you to approve each action.\n\nThe plugin also includes skills for developers building on iMBrace with the TypeScript and Python SDKs, the CLI and the hosted MCP server.\n\nAccess is limited to the organizations your iMBrace account belongs to, and to what your organization's plan includes. Documentation: https://engineer.imbrace.co/mcp/overview/",
+        "developerName": "iMBrace Limited",
+        "category": "Business & Operations",
+        "capabilities": [
+          "Search and read CRM data boards",
+          "Add and update board records",
+          "Find contacts and read conversations",
+          "List and trigger workflows",
+          "Ask your organization's AI agents"
+        ],
+        "defaultPrompt": [
+          "What data boards do I have in iMBrace?",
+          "Which of my iMBrace workflows are turned on?",
+          "List the AI agents in my iMBrace organization"
+        ],
+        "websiteURL": "https://engineer.imbrace.co/mcp/overview/",
+        "supportURL": "https://github.com/imbrace-co/imbrace-agent-toolkit/issues",
+        "privacyPolicyURL": "https://www.imbrace.co/privacy-policy/",
+        "termsOfServiceURL": "https://www.imbrace.co/terms-and-conditions/",
+        "brandColor": "#FA9917",
+        "logo": "./assets/logo.svg",
+        "composerIcon": "./assets/logo.svg"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "List the organization's data boards",
+              "prompt": "What data boards do I have in iMBrace? Give each board's name and how many records it has.",
+              "tools_triggered": "listBoards",
+              "expected_behavior": "Lists the boards of the organization chosen at sign-in (for example Contacts, Companies, Opportunities, Tasks) with their record counts, and nothing from other organizations."
+            },
+            {
+              "description": "Read records of one board",
+              "prompt": "Show me the five most recently updated records in my iMBrace Contacts board.",
+              "tools_triggered": "listBoards, listBoardItems",
+              "expected_behavior": "Finds the Contacts board, then returns up to five of its records with their main fields (name, email, phone). If the board is empty it says so."
+            },
+            {
+              "description": "List workflows and their status",
+              "prompt": "Which of my iMBrace workflows are turned on, and what triggers each one?",
+              "tools_triggered": "listFlows",
+              "expected_behavior": "Lists the organization's workflows with name, status (enabled or disabled) and trigger, and points out which are enabled."
+            },
+            {
+              "description": "List the organization's AI agents",
+              "prompt": "List the AI agents in my iMBrace organization and what each one is for.",
+              "tools_triggered": "listAgents",
+              "expected_behavior": "Lists the organization's AI agents (custom agents and built-in helper agents) with a short description of each."
+            },
+            {
+              "description": "Find users of the organization",
+              "prompt": "Who are the members of my iMBrace organization and what are their roles?",
+              "tools_triggered": "listAllUsers",
+              "expected_behavior": "Lists the organization's members with display name, email and role (owner, admin or user), without data from other organizations."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unrelated question that needs no iMBrace data",
+              "prompt": "What will the weather be in Hong Kong tomorrow?"
+            },
+            {
+              "description": "Payment the plugin does not support",
+              "prompt": "Use iMBrace to send 100 US dollars to my supplier's bank account."
+            },
+            {
+              "description": "Data of an organization the user did not sign in to",
+              "prompt": "Show me the CRM boards of another company that uses iMBrace."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or process payments."
+      },
+      "publication": {
+        "release_notes": "First release: connect ChatGPT to your iMBrace organization with OAuth sign-in and an organization picker. Read and update CRM data boards, contacts and conversations, list and trigger workflows, and ask your organization's AI agents, which ask for approval before they change data. Includes developer skills for the iMBrace SDK, CLI and MCP server."
+      }
+    }
+  }
+}

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.4
+
+- New package for the OpenAI plugin directory (ChatGPT): `dist/imbrace-openai-mcp-v<version>.zip`, built from
+  `openai/mcp/` in the portable Agent Plugins layout (`plugin.json`, `mcp.json`, `skills/`, `assets/`). It connects
+  ChatGPT to the production iMBrace MCP server with OAuth (dynamic client registration, no client credentials in
+  the package) and carries the listing, the five positive and three negative review test cases and the release
+  notes. `scripts/package.mjs` checks the limits the final submission enforces (30-character name and subtitle,
+  category, 5 + 3 test cases, HTTPS links, no server headers, no reviewer credentials in the ZIP).
+- No change to the Claude Code plugin or its skills.
+
 ## 0.3.3
 
 - `imbrace-build-agents-workflows` and `imbrace-sdk` skills: create AI agents with `client.agent.createUseCase`,
