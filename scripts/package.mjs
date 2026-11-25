@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// Builds the two release packages into dist/:
+// Builds the release packages into dist/:
 //   imbrace-claude-marketplace-v<version>.zip    the marketplace repo (Claude Code)
 //   imbrace-openai-skills-only-v<version>.zip    skills-only plugin (OpenAI / Codex)
+//   imbrace-openai-mcp-v<version>.zip            MCP + skills plugin for the OpenAI plugin directory (ChatGPT)
 // and checks the limits each target enforces. No dependencies: Node 20.15+.
 
 import { readFileSync, writeFileSync, readdirSync, statSync, mkdirSync, rmSync } from "node:fs";
@@ -16,6 +17,8 @@ const readJson = (p) => JSON.parse(readFileSync(p, "utf8"));
 const claudeManifest = readJson(join(PLUGIN, ".claude-plugin", "plugin.json"));
 const codexManifest = readJson(join(ROOT, "openai", "codex-plugin.json"));
 const marketplace = readJson(join(ROOT, ".claude-plugin", "marketplace.json"));
+const openaiMcpManifest = readJson(join(ROOT, "openai", "mcp", "plugin.json"));
+const openaiMcpConfig = readJson(join(ROOT, "openai", "mcp", "mcp.json"));
 const version = claudeManifest.version;
 
 // ---- checks -----------------------------------------------------------------
@@ -33,6 +36,48 @@ for (const [field, max] of [["displayName", 30], ["shortDescription", 30], ["lon
 check((ui.defaultPrompt ?? []).length <= 3 && ui.defaultPrompt.every((p) => p.length <= 128), "defaultPrompt: max 3, each <= 128");
 for (const url of ["websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"]) {
   check(!ui[url] || ui[url].startsWith("https://"), `interface.${url} must be https`);
+}
+
+// OpenAI MCP plugin (portable Agent Plugins format): limits the final submission enforces
+// (developers.openai.com/plugins/deploy/submission and /submission-errors).
+const OPENAI_CATEGORIES = ["Productivity", "Creativity", "Developer Tools", "Business & Operations", "Data & Analytics",
+  "Communication", "Education & Research", "Security", "Finance", "Healthcare", "Travel", "Entertainment", "Other"];
+{
+  const m = openaiMcpManifest;
+  const oa = m.extensions?.["com.openai"] ?? {};
+  const mi = oa.interface ?? {};
+  check(m.version === version, `openai/mcp/plugin.json version ${m.version} != ${version}`);
+  check(/^[a-z0-9]+(-[a-z0-9]+)*$/.test(m.name) && m.name.length <= 64, "openai/mcp: name lowercase, single hyphens, <= 64");
+  check(m.description && m.description.length <= 1024, "openai/mcp: description missing or > 1024");
+  for (const [field, max] of [["displayName", 30], ["shortDescription", 30], ["longDescription", 4000], ["developerName", 80]]) {
+    check(mi[field] && mi[field].length <= max, `openai/mcp: interface.${field} missing or > ${max} chars`);
+  }
+  check(!/\b(MCP|Plugin)\b/i.test(mi.displayName ?? ""), "openai/mcp: displayName must not contain MCP or Plugin");
+  check(OPENAI_CATEGORIES.includes(mi.category), `openai/mcp: category "${mi.category}" is not an OpenAI category`);
+  check((mi.capabilities ?? []).length <= 20 && mi.capabilities.every((c) => c.length <= 120), "openai/mcp: capabilities max 20, each <= 120");
+  const prompts = mi.defaultPrompt ?? [];
+  check(prompts.length <= 3 && prompts.every((p) => p.length <= 128 && !p.includes("@")) && new Set(prompts).size === prompts.length,
+    "openai/mcp: defaultPrompt max 3, unique, each <= 128, no @mention");
+  for (const url of ["websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"]) {
+    check(mi[url]?.startsWith("https://"), `openai/mcp: interface.${url} required and https`);
+  }
+  check(/^#[0-9A-Fa-f]{6}$/.test(mi.brandColor ?? ""), "openai/mcp: brandColor #RRGGBB");
+  check(existsRel(PLUGIN, mi.logo) && existsRel(PLUGIN, mi.composerIcon), "openai/mcp: logo / composerIcon file missing");
+  const tc = oa.review?.test_cases ?? {};
+  check((tc.positive ?? []).length === 5 && tc.positive.every((c) => c.description && c.prompt && c.tools_triggered && c.expected_behavior),
+    "openai/mcp: exactly 5 positive test cases with description, prompt, tools_triggered, expected_behavior");
+  check((tc.negative ?? []).length === 3 && tc.negative.every((c) => c.description && c.prompt), "openai/mcp: exactly 3 negative test cases");
+  check(!("test_credentials" in (oa.review ?? {})) && !("reviewer_instructions" in (oa.review ?? {})),
+    "openai/mcp: reviewer credentials go in the dashboard, not the ZIP");
+  check(oa.publication?.release_notes, "openai/mcp: publication.release_notes required");
+  const servers = Object.values(openaiMcpConfig.mcpServers ?? {});
+  check(servers.length === 1, "openai/mcp: exactly one MCP server");
+  for (const s of servers) {
+    check(s.type === "streamable-http" && s.url === "https://app-gatewayv2.imbrace.co/mcp", "openai/mcp: production streamable-http URL");
+    check(!s.headers || Object.keys(s.headers).length === 0, "openai/mcp: no server headers (public submission rejects them)");
+    const client = s.extensions?.["com.openai"]?.auth?.client ?? {};
+    check(client.mode === "dcr" && !client.clientId && !client.clientSecret, "openai/mcp: OAuth DCR with no client credentials");
+  }
 }
 
 const skillsDir = join(PLUGIN, "skills");
@@ -53,6 +98,7 @@ check(skills.length > 0, "no skills");
 for (const f of [
   join(ROOT, "README.md"), join(PLUGIN, "README.md"), join(ROOT, "openai", "README.md"),
   join(PLUGIN, ".claude-plugin", "plugin.json"), join(ROOT, "openai", "codex-plugin.json"), join(PLUGIN, ".mcp.json"),
+  join(ROOT, "openai", "mcp", "plugin.json"), join(ROOT, "openai", "mcp", "mcp.json"),
 ]) {
   check(!/api_[A-Za-z0-9]{16,}/.test(readFileSync(f, "utf8")), `${relative(ROOT, f).split(sep).join(posix.sep)}: looks like a real API key`);
 }
@@ -150,7 +196,18 @@ const openaiEntries = [
 const openaiZip = join(DIST, `imbrace-openai-skills-only-v${version}.zip`);
 writeFileSync(openaiZip, zip(openaiEntries));
 
-for (const [file, entries] of [[claudeZip, claudeEntries], [openaiZip, openaiEntries]]) {
+// 3. OpenAI MCP plugin: portable layout at the archive root (plugin.json, mcp.json, skills/, assets/).
+// Forward-slash paths only; nothing beside the plugin root.
+const openaiMcpEntries = [
+  { path: "plugin.json", data: JSON.stringify(openaiMcpManifest, null, 2) + "\n" },
+  { path: "mcp.json", data: JSON.stringify(openaiMcpConfig, null, 2) + "\n" },
+  ...walk(PLUGIN, (rel, name) => skipLocal(rel, name) || [".claude-plugin", ".mcp.json", "README.md"].includes(name))
+    .map((f) => ({ path: toPosix(relative(PLUGIN, f)), data: readFileSync(f) })),
+];
+const openaiMcpZip = join(DIST, `imbrace-openai-mcp-v${version}.zip`);
+writeFileSync(openaiMcpZip, zip(openaiMcpEntries));
+
+for (const [file, entries] of [[claudeZip, claudeEntries], [openaiZip, openaiEntries], [openaiMcpZip, openaiMcpEntries]]) {
   console.log(`${relative(ROOT, file)}  (${entries.length} files)`);
   for (const e of entries) console.log("   " + e.path);
 }

@@ -33,16 +33,25 @@
 - [ ] Link install instructions from engineer.imbrace.co (all locales).
 - [ ] Optional: submit to Anthropic's plugin directory (`claude plugin validate --profile directory` already passes).
 
-## OpenAI plugin directory (skills-only)
+## OpenAI plugin directory (MCP + skills, ChatGPT)
 
-Decision to confirm: a skills-only plugin **cannot get MCP added later**. A future MCP plugin uses the gateway's
-OAuth 2.1 (ChatGPT as a pre-registered confidential client) and will be a separate listing.
+Package: `dist/imbrace-openai-mcp-v<version>.zip` from `openai/mcp/`. One listing, one MCP URL (production
+`https://app-gatewayv2.imbrace.co/mcp`); changing the URL later needs OpenAI support. Docs:
+developers.openai.com/apps-sdk/deploy/submission, /apps-sdk/app-submission-guidelines, /plugins/deploy/submission-errors.
 
-- [ ] Publisher: verified business identity on the OpenAI org; submitter is owner or has Apps Management Write.
-- [ ] platform.openai.com/plugins → Create plugin → **Skills only** → upload
-      `dist/imbrace-openai-skills-only-v0.2.0.zip`.
-- [ ] Check `interface.category` against the dashboard list (currently "Developer Tools"); fix scan results.
-- [ ] Test in Codex and ChatGPT with a clean account: the three default prompts, plus one request that should
-      **not** trigger a skill (e.g. "What is the weather?").
-- [ ] Submit, answer review feedback, then **Publish** (approval alone does not list it).
-- [ ] Put the listing URL in `README.md` and on engineer.imbrace.co.
+- [ ] Publisher: individual or business verification on the OpenAI organization (Settings → Organization → General);
+      the listing shows that identity as developer. Submitter is owner or has Apps Management Write.
+- [ ] platform.openai.com/plugins → Upload new or existing plugin → upload the ZIP → fix metadata / skills checks.
+- [ ] MCP: connect the server → domain verification: put the token from the portal in the production gateway's
+      `OPENAI_APPS_CHALLENGE` (served as plain text at `/.well-known/openai-apps-challenge`) → Verify → OAuth (DCR)
+      → tool scan passes. Every tool already sets `readOnlyHint` / `destructiveHint` / `openWorldHint`.
+- [ ] Review details (dashboard, not the ZIP): a production reviewer account that signs in with a password (no MFA,
+      no email code), in an organization with sample data, `mcp_access` and a working chat model; demo video URL.
+- [ ] Run the five positive and three negative test cases in `openai/mcp/plugin.json` in ChatGPT before submitting.
+- [ ] Submit for review (attestations), answer feedback, then **Publish** (approval alone does not list it).
+- [ ] Each update: bump the version (a new release must change it) and upload the new ZIP.
+
+## OpenAI plugin directory (skills-only, not submitted)
+
+The older skills-only package (`imbrace-openai-skills-only-*.zip`) stays buildable; it **cannot get MCP added
+later**, so the MCP package above is the one to submit.

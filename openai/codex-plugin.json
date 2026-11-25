@@ -1,6 +1,6 @@
 {
   "name": "imbrace-developer",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Build on the iMBrace platform: get started, use the TypeScript/Python SDK, connect the hosted MCP server, drive the CLI, and build AI agents, workflows, knowledge hubs and CRM boards.",
   "author": {
     "name": "iMBrace Limited",
